@@ -150,14 +150,60 @@ def data():
     	form1 = form1,
     	form2 = form2
 	)
+@app.route('/login', methods=['GET', 'POST'])
+def Login():
+    form = LoginFormStructure(request.form)
+
+    if (request.method == 'POST' and form.validate()):
+        if (db_Functions.IsLoginGood(form.username.data, form.password.data)):
+            flash('Login approved!')
+            #return redirect('<were to go if login is good!')
+        else:
+            flash('Error in - Username and/or password')
+   
+    return render_template(
+        'login.html', 
+        form=form, 
+        title='Login to data analysis',
+        year=datetime.now().year,
+        repository_name='Pandas',
+        )
 
 
-#@app.route('/DATA')
-#def DATA():
-  #  """Renders the DATA page."""
-   # return render_template(
-     #   'DATA.html',
-      #  title='Data Modiel',
-       # year=datetime.now().year,
-       # message='Your application description page.'
-  #  )
+
+
+
+@app.route('/DataQuery', methods=['GET', 'POST'])
+def DataQuery():
+
+    Name = None
+    HODESH_TEUNA = ''
+    capital = ''
+    df = pd.read_csv(path.join(path.dirname(__file__), 'static\\Data\\accdatwebsite.csv'))
+    df = df.set_index('HODESH_TEUNA')
+
+    raw_data_table = df.to_html(classes = 'table table-hover')
+
+    form = QueryFormStructure(request.form)
+     
+    if (request.method == 'POST' ):
+        name = form.name.data
+        HODESH_TEUNA = name
+        if (name in df.index):
+            capital = df.loc[name,'Capital']
+            raw_data_table = ""
+        else:
+            capital = name + ', no such HODES TEUNA'
+        form.name.data = ''
+
+
+
+    return render_template('DataQuery.html', 
+            form = form, 
+            name = capital, 
+           HODESH_TEUNA = HODESH_TEUNA,
+            raw_data_table = raw_data_table,
+            title='DataQuery by the user',
+            year=datetime.now().year,
+            message='This page will use the web forms to get user input'
+        )
