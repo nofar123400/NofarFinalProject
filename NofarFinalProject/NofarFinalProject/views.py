@@ -207,3 +207,50 @@ def DataQuery():
             year=datetime.now().year,
             message='This page will use the web forms to get user input'
         )
+
+@app.route('/YomLayla' , methods = ['GET' , 'POST'])
+def YomLayla():
+
+    print("Yom Layla")
+    print("Nofar")
+
+
+    form1 = YomLayla()
+    chart = ''
+
+   
+    df = pd.read_csv(path.join(path.dirname(__file__), 'static/data/accdatwebsite.csv'))
+
+
+    if request.method == 'POST':
+        yl = int(form1.yl.data)
+
+
+        df = df[['HODESH_TEUNA','YOM_LAYLA','SUG_TEUNA']]
+        df = df.loc[(df['YOM_LAYLA'] == yl)]
+        new_df = pd.DataFrame()
+        hodesh_list = list(set(df['HODESH_TEUNA']))
+        new_df['HODESH'] = hodesh_list
+        sug_list = list(set(df['SUG_TEUNA']))
+        for sug in sug_list:
+            df_tmp = df.loc[(df['SUG_TEUNA'] == sug)]
+            s = df_tmp.groupby('HODESH_TEUNA').size()
+            for i in range(1,13):
+                if not i in s.index:
+                    s[i] = 0
+            s = s.sort_index()
+            l = list(s)
+            new_df[str(sug)] = l
+        new_df = new_df.set_index('HODESH')
+        fig1 = plt.figure()
+        ax = fig1.add_subplot(111)
+        new_df.plot(ax = ax , kind='bar',stacked=True)
+        chart = plot_to_img(fig1)
+
+    
+    return render_template(
+        'YomLayla.html',
+        img_under_construction = '/static/imgs/under_construction.png',
+        form1 = form1,
+        chart = chart
+    )
