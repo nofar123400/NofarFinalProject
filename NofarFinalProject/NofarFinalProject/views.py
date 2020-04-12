@@ -124,7 +124,7 @@ def Register():
 
 
 @app.route('/DATA' , methods = ['GET' , 'POST'])
-def data():
+def DATA():
     form1 = ExpandForm()
     form2 = CollapseForm()
     df = pd.read_csv(path.join(path.dirname(__file__), 'static\\data\\accdatwebsite.csv'),encoding="utf-8")
@@ -211,8 +211,8 @@ def DataQuery():
 @app.route('/YomLayla' , methods = ['GET' , 'POST'])
 def YomLayla():
 
-    print("Yom Layla")
-    print("Nofar")
+    #print("Yom Layla")
+    #print(request.method)
 
 
     form1 = YomLayla()
@@ -247,10 +247,23 @@ def YomLayla():
         new_df.plot(ax = ax , kind='bar',stacked=True)
         chart = plot_to_img(fig1)
 
-    
+    print("rander")
     return render_template(
         'YomLayla.html',
         img_under_construction = '/static/imgs/under_construction.png',
         form1 = form1,
         chart = chart
+    )
+
+@app.route('/dataset1')
+def dataset1():
+    df = pd.read_csv(path.join(path.dirname(__file__), 'static\\Data\\accdatwebsite.csv'))
+    raw_data_table = df.sample(30).to_html(classes = 'table table-hover')
+
+    return render_template(
+        'dataset1.html',
+        title='UFO testmonials, by place and date',
+        raw_data_table = raw_data_table,
+        year=datetime.now().year,
+        message='This page displays data that can be analyzed and help us understand - ARE THERE UFOs ??'
     )
