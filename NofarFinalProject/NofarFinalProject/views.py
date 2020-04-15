@@ -31,6 +31,8 @@ import requests
 
 import io
 import base64
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 from os import path
 
@@ -45,7 +47,7 @@ from NofarFinalProject.Models.QueryFormStructure import LoginFormStructure
 from NofarFinalProject.Models.QueryFormStructure import UserRegistrationFormStructure 
 from NofarFinalProject.Models.Forms import ExpandForm
 from NofarFinalProject.Models.Forms import CollapseForm
-from NofarFinalProject.Models.Forms import yomlayla 
+from NofarFinalProject.Models.Forms import YomLayla 
 
 
 ###from NofarFinalProject.Models.LocalDatabaseRoutines import IsUserExist, IsLoginGood, AddNewUser 
@@ -155,7 +157,7 @@ def Login():
 
 
 @app.route('/YomLayla' , methods = ['GET' , 'POST'])
-def YomLayla():
+def yomlayla():
 
     form1 = YomLayla()
     chart = ''
@@ -168,14 +170,14 @@ def YomLayla():
         yl = int(form1.yl.data)
 
 
-        df = df[['HODESH_TEUNA','YOM_LAYLA','HUMRAT_TEUMA']]
+        df = df[['HODESH_TEUNA','YOM_LAYLA','HUMRAT_TEUNA']]
         df = df.loc[(df['YOM_LAYLA'] == yl)]
         new_df = pd.DataFrame()
         hodesh_list = list(set(df['HODESH_TEUNA']))
         new_df['HODESH'] = hodesh_list
-        sug_list = list(set(df['HUMRAT_TEUMA']))
+        sug_list = list(set(df['HUMRAT_TEUNA']))
         for sug in sug_list:
-            df_tmp = df.loc[(df['HUMRAT_TEUMA'] == sug)]
+            df_tmp = df.loc[(df['HUMRAT_TEUNA'] == sug)]
             s = df_tmp.groupby('HODESH_TEUNA').size()
             for i in range(1,13):
                 if not i in s.index:
@@ -213,3 +215,10 @@ def dataset1():
         year=datetime.now().year,
         message='This page displays data that can be analyzed and help us understand - ARE THERE UFOs ??'
     )
+
+def plot_to_img(fig):
+    pngImage = io.BytesIO()
+    FigureCanvas(fig).print_png(pngImage)
+    pngImageB64String = "data:image/png;base64,"
+    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
+    return pngImageB64String

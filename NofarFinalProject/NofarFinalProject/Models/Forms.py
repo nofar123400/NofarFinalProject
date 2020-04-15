@@ -21,6 +21,6 @@ class CollapseForm(FlaskForm):
 	name="Collapse"
 	value="Collapse"
 
-class yomlayla(FlaskForm):
+class YomLayla(FlaskForm):
     yl = RadioField('Choose Day or Night:' , validators = [DataRequired] , choices=[('1', 'Day'), ('5', 'Night')])
     subnmit = SubmitField('Submit')
