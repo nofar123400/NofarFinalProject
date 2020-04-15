@@ -1,12 +1,49 @@
 ﻿{% extends "layout.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
 
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
+<h2>{{title}}</h2>
 
-{{ raw_data_table | safe}}
+<h3>{{message}}</h3>
 
 
-    {% endblock %}
+<div class="row" style="background-color:coral">
+    <div class="col-md-6"><strong>YOM_LAYLA</strong></div>
+    <div class="col-md-6"><strong>5 accident occurred at night and 1 accident occurred on day</strong></div>
+</div>
+<div class="row" style="        background-color: coral
+">
+    <div class="col-md-6">HUMRAT_TEUNA </div>
+    <div class="col-md-6">1 minor accident 2 medium and 3 serious accident</div>
+</div>
+<div class="row" style="background-color:coral">
+    <div class="col-md-6">HODESH_TEUNA</div>
+    <div class="col-md-6">Month of accident by number of month per year</div>
+</div>
+<br />
+
+<p>
+    <a class="btn btn-success" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Expand
+    </a>
+    <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Collapse
+    </button>
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        {{ raw_data_table | safe}}
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+

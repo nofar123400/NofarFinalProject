@@ -45,6 +45,8 @@ from NofarFinalProject.Models.QueryFormStructure import LoginFormStructure
 from NofarFinalProject.Models.QueryFormStructure import UserRegistrationFormStructure 
 from NofarFinalProject.Models.Forms import ExpandForm
 from NofarFinalProject.Models.Forms import CollapseForm
+from NofarFinalProject.Models.Forms import yomlayla 
+
 
 ###from NofarFinalProject.Models.LocalDatabaseRoutines import IsUserExist, IsLoginGood, AddNewUser 
 
@@ -97,7 +99,7 @@ def main():
         year=datetime.now().year,
         message='Your application description page.'
     )
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/Register', methods=['GET', 'POST'])
 def Register():
     form = UserRegistrationFormStructure(request.form)
 
@@ -113,7 +115,7 @@ def Register():
             form = UserRegistrationFormStructure(request.form)
 
     return render_template(
-        'register.html', 
+        'Register.html', 
         form=form, 
         title='Register New User',
         year=datetime.now().year,
@@ -122,34 +124,15 @@ def Register():
 
 
 
-
-@app.route('/DATA' , methods = ['GET' , 'POST'])
+@app.route('/DATA')
 def DATA():
-    form1 = ExpandForm()
-    form2 = CollapseForm()
-    df = pd.read_csv(path.join(path.dirname(__file__), 'static\\data\\accdatwebsite.csv'),encoding="utf-8")
-    raw_data_table = ''
- 
-    if request.method == 'POST':
-        if request.form['action'] == 'Expand' and form1.validate_on_submit():
-            raw_data_table = df.to_html(classes = 'table table-hover')
-        if request.form['action'] == 'Collapse' and form2.validate_on_submit():
-            raw_data_table = ''
- 
- 
+    """Renders the about page."""
     return render_template(
-    	'DATA.html',
-        title='DATA',
-    	year=datetime.now().year,
-        message='My Trump page.',
-        img_trump = '/static/imgs/trump.jpg',
-        img_obama = '/static/imgs/trump.jpg',
-        img_bush = '/static/imgs/trump.jpg',
-        img_clinton = '/static/imgs/trump.jpg',
-        raw_data_table = raw_data_table,
-    	form1 = form1,
-    	form2 = form2
-	)
+        'DATA.html',
+        title='Data Model',
+        year=datetime.now().year,
+    )
+
 @app.route('/login', methods=['GET', 'POST'])
 def Login():
     form = LoginFormStructure(request.form)
@@ -171,49 +154,8 @@ def Login():
 
 
 
-
-
-@app.route('/DataQuery', methods=['GET', 'POST'])
-def DataQuery():
-
-    Name = None
-    HODESH_TEUNA = ''
-    capital = ''
-    df = pd.read_csv(path.join(path.dirname(__file__), 'static\\Data\\accdatwebsite.csv'))
-    df = df.set_index('HODESH_TEUNA')
-
-    raw_data_table = df.to_html(classes = 'table table-hover')
-
-    form = QueryFormStructure(request.form)
-     
-    if (request.method == 'POST' ):
-        name = form.name.data
-        HODESH_TEUNA = name
-        if (name in df.index):
-            capital = df.loc[name,'Capital']
-            raw_data_table = ""
-        else:
-            capital = name + ', no such HODES TEUNA'
-        form.name.data = ''
-
-
-
-    return render_template('DataQuery.html', 
-            form = form, 
-            name = capital, 
-           HODESH_TEUNA = HODESH_TEUNA,
-            raw_data_table = raw_data_table,
-            title='DataQuery by the user',
-            year=datetime.now().year,
-            message='This page will use the web forms to get user input'
-        )
-
 @app.route('/YomLayla' , methods = ['GET' , 'POST'])
 def YomLayla():
-
-    #print("Yom Layla")
-    #print(request.method)
-
 
     form1 = YomLayla()
     chart = ''
@@ -226,14 +168,14 @@ def YomLayla():
         yl = int(form1.yl.data)
 
 
-        df = df[['HODESH_TEUNA','YOM_LAYLA','SUG_TEUNA']]
+        df = df[['HODESH_TEUNA','YOM_LAYLA','HUMRAT_TEUMA']]
         df = df.loc[(df['YOM_LAYLA'] == yl)]
         new_df = pd.DataFrame()
         hodesh_list = list(set(df['HODESH_TEUNA']))
         new_df['HODESH'] = hodesh_list
-        sug_list = list(set(df['SUG_TEUNA']))
+        sug_list = list(set(df['HUMRAT_TEUMA']))
         for sug in sug_list:
-            df_tmp = df.loc[(df['SUG_TEUNA'] == sug)]
+            df_tmp = df.loc[(df['HUMRAT_TEUMA'] == sug)]
             s = df_tmp.groupby('HODESH_TEUNA').size()
             for i in range(1,13):
                 if not i in s.index:
@@ -247,13 +189,17 @@ def YomLayla():
         new_df.plot(ax = ax , kind='bar',stacked=True)
         chart = plot_to_img(fig1)
 
-    print("rander")
+    
     return render_template(
         'YomLayla.html',
         img_under_construction = '/static/imgs/under_construction.png',
         form1 = form1,
         chart = chart
     )
+
+
+
+
 
 @app.route('/dataset1')
 def dataset1():
@@ -262,7 +208,7 @@ def dataset1():
 
     return render_template(
         'dataset1.html',
-        title='UFO testmonials, by place and date',
+        title='Data set',
         raw_data_table = raw_data_table,
         year=datetime.now().year,
         message='This page displays data that can be analyzed and help us understand - ARE THERE UFOs ??'

@@ -52,10 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NofarFinalProject\static\Data\accdatwebsite.csv" />
+    <Content Include="NofarFinalProject\static\Data\USERS.csv" />
     <Content Include="NofarFinalProject\static\Data\דף איפיון מדעי המחשב.docx" />
     <Content Include="NofarFinalProject\static\Pics\pic1.jpg" />
     <Content Include="NofarFinalProject\templates\DATA.html" />
-    <Content Include="NofarFinalProject\templates\DataQuery.html" />
     <Content Include="NofarFinalProject\templates\dataset1.html" />
     <Content Include="NofarFinalProject\templates\Login.html" />
     <Content Include="NofarFinalProject\templates\main.html" />
